@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
@@ -31,9 +35,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
+    private final int SPAN_COUNT = 2;
     private Button mSearchBtn;
     private RecyclerView mSearchResultRV;
     private AutoCompleteTextView mSearchInputACTV;
+    private Toolbar myToolbar;
+    private boolean mIsCurrentLineLayout = true;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     private SearchResultAdapter mRecycleViewAdapter;
 
@@ -42,10 +50,56 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
         mSearchInputACTV = (AutoCompleteTextView) findViewById(R.id.search_input_auto);
 
         initializeSearchButton();
         initializeSearchResultRecyclerView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_toggle_layout:
+                toggleRecyclerViewLayoutManager(item);
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void toggleRecyclerViewLayoutManager(MenuItem item) {
+        int scrollPosition = 0;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (mSearchResultRV.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mSearchResultRV.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+        if (mIsCurrentLineLayout) {
+            mLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
+            item.setIcon(R.drawable.images_list); // if new is grid layout, then menu change back to list
+        } else {
+            mLayoutManager = new LinearLayoutManager(this);
+            item.setIcon(R.drawable.images_grid);
+        }
+        mIsCurrentLineLayout = !mIsCurrentLineLayout;
+        mSearchResultRV.setLayoutManager(mLayoutManager);
+        mSearchResultRV.scrollToPosition(scrollPosition);
+
     }
 
     public class SearchResultTask extends AsyncTask<Void, Void, List<Photo>> {
@@ -124,8 +178,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeSearchResultRecyclerView() {
+        mLayoutManager = new LinearLayoutManager(this);
         mSearchResultRV = (RecyclerView) findViewById(R.id.search_result_recyleview);
         mSearchResultRV.setHasFixedSize(true);
-        mSearchResultRV.setLayoutManager(new LinearLayoutManager(this));
+        mSearchResultRV.setLayoutManager(mLayoutManager);
     }
 }
