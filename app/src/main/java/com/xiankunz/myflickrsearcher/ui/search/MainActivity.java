@@ -1,5 +1,6 @@
 package com.xiankunz.myflickrsearcher.ui.search;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
@@ -108,8 +110,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 doSearch();
+                hideKeyboard();
             }
         });
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void initializeSearchResultRecyclerView() {
