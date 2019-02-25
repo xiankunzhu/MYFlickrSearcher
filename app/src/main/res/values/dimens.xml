@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="search_input_edit_height">45dp</dimen>
+    <dimen name="search_result_item_height">120dp</dimen>
+    <dimen name="search_result_item_padding">6dp</dimen>
+
+    <dimen name="search_result_item_poster_width">120dp</dimen>
+    <dimen name="search_result_item_poster_height">80dp</dimen>
+
+</resources>

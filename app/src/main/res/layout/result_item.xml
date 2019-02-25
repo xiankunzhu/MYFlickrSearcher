@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="@dimen/search_result_item_height">
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:id="@+id/metadata"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/search_result_item_padding">
+
+    <!--> just show a title here, more later<-->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/search_result_item_poster_width"
+        android:layout_height="@dimen/search_result_item_poster_height"
+        android:id="@+id/poster"
+        android:layout_margin="@dimen/search_result_item_padding"
+        />
+</LinearLayout>
